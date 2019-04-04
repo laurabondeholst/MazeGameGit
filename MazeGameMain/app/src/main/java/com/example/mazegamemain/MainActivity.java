@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.livelife.motolibrary.AntData;
 import com.livelife.motolibrary.MotoConnection;
 import com.livelife.motolibrary.MotoSound;
 import com.livelife.motolibrary.OnAntEventListener;
 
+import static com.livelife.motolibrary.AntData.EVENT_PRESS;
 import static com.livelife.motolibrary.AntData.LED_COLOR_BLUE;
 import static com.livelife.motolibrary.AntData.LED_COLOR_GREEN;
+import static com.livelife.motolibrary.AntData.LED_COLOR_OFF;
 import static com.livelife.motolibrary.AntData.LED_COLOR_ORANGE;
 import static com.livelife.motolibrary.AntData.LED_COLOR_RED;
 
@@ -27,18 +30,19 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
 
     MotoConnection connection;
     MotoSound sound;
+    boolean isPairing = false;
+    static byte SPRITE_COLOR = 3;
 
-    //buttons yo
+    //buttons
     Button button_pairing;
     Button button_calibrate;
     Button button_easy;
     Button button_medium;
     Button button_hard;
-    Button button_red;
-    Button button_green;
-    Button button_blue;
+    Button button_colorRed;
+    Button button_colorGreen;
+    Button button_colorBlue;
 
-    boolean isPairing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
             }
         });
 
+        //calibrate button for swapping to CalibrateActivity
         button_calibrate = findViewById(R.id.button_calibrate);
         button_calibrate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +88,35 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
                 startActivity(i);
             }
         });
+
+        //button for picking red colored sprite
+        button_colorRed = findViewById(R.id.button_colorRed);
+        button_colorRed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SPRITE_COLOR = LED_COLOR_RED;
+            }
+        });
+
+        //button for picking green colored sprite
+        button_colorGreen = findViewById(R.id.button_colorGreen);
+        button_colorGreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SPRITE_COLOR = LED_COLOR_GREEN;
+            }
+        });
+
+        //button for picking blue colored sprite
+        button_colorBlue = findViewById(R.id.button_colorBlue);
+        button_colorBlue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SPRITE_COLOR = LED_COLOR_BLUE;
+            }
+        });
     }
+
 
     @Override
     public void onMessageReceived(byte[] bytes, long l)
