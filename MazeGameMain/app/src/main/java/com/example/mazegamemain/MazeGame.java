@@ -96,7 +96,7 @@ public class MazeGame extends Game
     }
 
     public boolean checkMazeEdge() // Laura, returns false if player hits maze edge
-    {
+    {                           // this method assumes that player_next_pos is within boundaries
         int i = 0;
 
         int dir_x = player_next_pos[0]-player[0];
@@ -108,7 +108,7 @@ public class MazeGame extends Game
 
         while (i < step) // for each number in step, check for wall
         {
-            if(maze[player_next_pos[0]-i*dir_x][player_next_pos[1]-i*dir_y] != 0) // if next position of player equals a wall, change next position
+            if(maze[player_next_pos[0]-i*dir_x][player_next_pos[1]-i*dir_y] == 1) // if next position of player equals a wall, change next position
             {
                 // if player hit a wall, go back to original pos
                 player_next_pos[0] = player[0];
@@ -173,7 +173,7 @@ public class MazeGame extends Game
 
     private void displayMaze() // Yichen
     {
-        // when displaying the maze, please be aware of x/y orientation. 
+        // when displaying the maze, please be aware of x/y orientation.
     }
 
     public void initZeros() // Laura
