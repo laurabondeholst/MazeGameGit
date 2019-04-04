@@ -1,5 +1,6 @@
 package com.example.mazegamemain;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,8 +25,15 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
     MotoConnection connection;
     MotoSound sound;
 
-    //buttons
+    //buttons yo
     Button button_pairing;
+    Button button_calibrate;
+    Button button_easy;
+    Button button_medium;
+    Button button_hard;
+    Button button_red;
+    Button button_green;
+    Button button_blue;
 
     boolean isPairing = false;
 
@@ -62,6 +70,16 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
                 isPairing = !isPairing;
             }
         });
+
+        button_calibrate = findViewById(R.id.button_calibrate);
+        button_calibrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connection.unregisterListener(MainActivity.this);
+                Intent i = new Intent(MainActivity.this, CalibrateActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -90,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
     protected void onRestart() {
         super.onRestart();
         connection.registerListener(MainActivity.this);
+        connection.registerListener(this);
+        connection.startMotoConnection(MainActivity.this);
     }
     @Override
     protected void onDestroy() {
