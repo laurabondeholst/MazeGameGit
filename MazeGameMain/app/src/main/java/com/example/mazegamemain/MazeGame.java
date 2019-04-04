@@ -8,5 +8,23 @@ import com.livelife.motolibrary.Game;
 
  */
 
-public class MazeGame extends Game {
+public class MazeGame extends Game
+{
+
+
+    @Override
+    public void onGameStart() {
+        super.onGameStart();
+    }
+
+    @Override
+    public void onGameUpdate(byte[] message) {
+
+
+    }
+
+    @Override
+    public void onGameEnd() {
+        super.onGameEnd();
+    }
 }

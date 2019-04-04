@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 public class MazeGameActivity extends AppCompatActivity {
 
+    // hello my friend
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

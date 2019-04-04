@@ -17,6 +17,9 @@ import static com.livelife.motolibrary.AntData.LED_COLOR_RED;
 /*
     Consist of "start game" and init of tiles
 
+    So Yichen is doing the layout on the tablet, Laura is doing the edge detection
+    and Michael is doing user interference.
+
  */
 
 public class MainActivity extends AppCompatActivity implements OnAntEventListener {
