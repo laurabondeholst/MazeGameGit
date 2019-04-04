@@ -3,6 +3,8 @@ package com.example.mazegamemain;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.livelife.motolibrary.MotoConnection;
+
 /*
     This creates the maze and updates it via the game
  */
