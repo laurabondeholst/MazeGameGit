@@ -48,8 +48,6 @@ public class MazeGameActivity extends View {
         red.setColor(getResources().getColor(R.color.position));
         background = new Paint();
         background.setColor(getResources().getColor(R.color.game_bg));
-        setFocusable(true);
-        this.setFocusableInTouchMode(true);
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) { // Yichen
@@ -62,6 +60,7 @@ public class MazeGameActivity extends View {
         totalCellHeight = cellHeight+lineWidth;
         red.setTextSize(cellHeight*0.75f);
         super.onSizeChanged(w, h, oldw, oldh);
+    }
    
     protected void onDraw(Canvas canvas) { // Yichen
         //fill in the background
@@ -71,6 +70,15 @@ public class MazeGameActivity extends View {
         //iterate over the boolean arrays to draw walls
         for (int i = 0; i < mazeSizeX; i++) {
             for (int j = 0; j < mazeSizeY; j++) {
+                 if(maze[i][j]  == 1)
+                 {
+                    // draw square;
+                 }
+                else if maze[i][j] == 1
+                {
+                   // draw space;   
+                }
+                /*
                 float x = j * totalCellWidth;
                 float y = i * totalCellHeight;
                 if (j < mazeSizeX - 1 && vLines[i][j]) {
@@ -89,6 +97,7 @@ public class MazeGameActivity extends View {
                             y + cellHeight,  //stopY
                             line);
                 }
+                */
             }
         }
         int currentX = maze.getCurrentX();
