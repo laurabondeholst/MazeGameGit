@@ -13,9 +13,10 @@ import com.livelife.motolibrary.MotoConnection;
 
 /*
     This draws the maze and traces movement of the ball
+    
  */
 
-public class MazeGameActivity extends View {
+public class MazeGameActivity extends View { 
     
     private int width, height, lineWidth; //width and height of the whole maze and width of lines which make the walls
     private int mazeSizeX, mazeSizeY; //size of the maze i.e. number of cells in it
@@ -32,7 +33,7 @@ public class MazeGameActivity extends View {
         setContentView(R.layout.activity_maze_game);
     }
     
-    public MazeGameActivity(Context context, MazeGame maze){
+    public MazeGameActivity(Context context, MazeGame maze){ // Yichen
         super(context);
         this.context = (Activity)context;
         this.maze = maze;
@@ -50,7 +51,7 @@ public class MazeGameActivity extends View {
         this.setFocusableInTouchMode(true);
     }
 
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) { // Yichen
         width = (w < h)?w:h;
         height = width;         //for now square mazes
         lineWidth = 1;          //for now 1 pixel wide walls
@@ -61,7 +62,7 @@ public class MazeGameActivity extends View {
         red.setTextSize(cellHeight*0.75f);
         super.onSizeChanged(w, h, oldw, oldh);
    
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) { // Yichen
         //fill in the background
         canvas.drawRect(0, 0, width, height, background);
         boolean[][] hLines = maze.getHorizontalLines();
