@@ -39,11 +39,9 @@ public class MazeGame extends Game
 
     int[] player = new int[3]; // contains players position (x,y) and number of hit in walls
     int[] player_next_pos = new int[2]; // contains players next position (x,y)
-    int[][] maze = new int[x][y];
+    int[][] maze = new int[x][y]; // 0 means empty field, 1 means wall, 2 means goal, 3 means start pos
 
     int finalX, finalY; // stores the finishing of maze
-    boolean[][] verticalLines;
-    boolean[][] horizontalLines;
 
 
 
@@ -266,47 +264,32 @@ public class MazeGame extends Game
         }
     }
     
-     public int getFinalX(){
+     public int getFinalX(){ // Yichen
         return finalX;
     }
 
-    public int getFinalY(){
+    public int getFinalY(){// Yichen
         return finalY;
     }
 
-    public boolean[][] getHorizontalLines() {
-        return horizontalLines;
-    }
-
-    public boolean[][] getVerticalLines() {
-        return verticalLines;
-    }
-
-    public int getCurrentX(){
+    public int getCurrentX(){// Yichen
         return player[0];
     }
 
-    public int getCurrentY(){
+    public int getCurrentY(){// Yichen
         return player[1];
     }
 
-    public void setStartPosition(int i, int j){
+    public void setStartPosition(int i, int j){// Yichen
         player[0] = i;
         player[1] = j;
+        mae[i][j] = 3;
     }
 
-    public void setFinalPosition(int i, int j){
+    public void setFinalPosition(int i, int j){// Yichen
         finalX = i;
         finalY = j;
+        maze[i][j] = 2;
     }
 
-    public void setHorizontalLines(boolean[][] lines){
-        horizontalLines = lines;
-        x = horizontalLines[0].length;
-    }
-
-    public void setVerticalLines(boolean[][] lines){
-        verticalLines = lines;
-        y = verticalLines.length;
-    }
 }
