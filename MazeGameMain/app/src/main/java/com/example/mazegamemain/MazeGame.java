@@ -64,7 +64,7 @@ public class MazeGame extends Game
     }
 
     @Override
-    public void onGameStart()
+    public void onGameStart() // Laura
     {
         super.onGameStart();
 
@@ -80,7 +80,7 @@ public class MazeGame extends Game
     }
 
     @Override
-    public void onGameUpdate(byte[] message)
+    public void onGameUpdate(byte[] message) // Laura
     {
         super.onGameUpdate(message);
         int event = AntData.getCommand(message);
@@ -161,26 +161,38 @@ public class MazeGame extends Game
     }
 
 
-    public void trackDirection(int tile_id) // Laura, what a hardcore method wauw
+    public void trackDirection(int tile_id) // Laura
     {
         if(tile_id == DIR_UP)
         {
-            player_next_pos[0]++;
+            if(player_next_pos[0] + 1 < x)
+            {
+                player_next_pos[0]++;
+            }           
         }
         else if(tile_id == DIR_DOWN)
         {
-            player_next_pos[0]--;
+            if(player_next_pos[0] -1 >= 0)
+            {
+                player_next_pos[0]--;
+            }         
         }
         else if(tile_id == DIR_LEFT)
         {
-            player_next_pos[1]--;
+             if(player_next_pos[1] - 1 >= 0)
+            {
+                player_next_pos[1]--;
+            }         
         }
         else if(tile_id == DIR_RIGHT)
         {
-            player_next_pos[1]++;
+             if(player_next_pos[1] + 1 < y)
+            {
+                player_next_pos[1]++;
+            }         
         }
     }
-
+    
     public void initView() // Yichen, initialising the maze into array
     {
 
@@ -205,7 +217,7 @@ public class MazeGame extends Game
     }
 
 
-    public void updatePlayerSprite()  // Yichen
+    public void updatePlayerSprite()  // Laura
     {
         player[0] = player_next_pos[0];
         player[1] = player_next_pos[1];
@@ -213,19 +225,9 @@ public class MazeGame extends Game
 
     public void initSprite()
     {
-        for(int i = 0; i < x; i++)
-        {
-            for (int j = 0; j < y; j++)
-            {
-                if (maze[i][j] == 3)
-                {
-                    player_next_pos[0] = i;
-                    player_next_pos[1] = j;
-                    updatePlayerSprite();
-                    return;
-                }
-            }
-        }
+        checkPlayerSprite();
+        player_next_pos[0] = player[0];
+        player_next_pos[1] = player[1];
     }
 
 
@@ -279,6 +281,21 @@ public class MazeGame extends Game
          }
     }
     
+    protected void checkStartPos()
+    {
+         for(int i = 0; i< x; i++)
+         {
+            for(int j = 0; i< y; i++)
+             {
+                    if(maze[i][j] == 3;
+                    {
+                        player[0] = i;
+                        player[1] = j;
+                    }
+             }
+         }
+    }
+    
      public int getFinalX(){ // Yichen & Laura
         checkFinalPos();
         return finalX;
@@ -297,13 +314,33 @@ public class MazeGame extends Game
         return player[1];
     }
 
-    public void setStartPosition(int i, int j){// Yichen
+    public void setStartPosition(int i, int j){
+        for(int i = 0; i< x; i++)
+         {
+            for(int j = 0; i< y; i++)
+             {
+                    if(maze[i][j] == 3;
+                    {
+                        maze[i][j] = 0; //resetting the final pos
+                    }
+             }
+         }
         player[0] = i;
         player[1] = j;
         maze[i][j] = 3;
     }
 
-    public void setFinalPosition(int i, int j){// Yichen
+    public void setFinalPosition(int i, int j){
+        for(int i = 0; i< x; i++)
+         {
+            for(int j = 0; i< y; i++)
+             {
+                    if(maze[i][j] == 2;
+                    {
+                        maze[i][j] = 0; //resetting the final pos from prev
+                    }
+             }
+         }
         finalX = i;
         finalY = j;
         maze[i][j] = 2;
