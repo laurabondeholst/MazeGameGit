@@ -153,16 +153,9 @@ public class MazeGame extends Game
 
     public boolean checkGoalReached() // Laura, if goal reached, return true
     {
-<<<<<<< HEAD
-        //if(maze[player_next_pos[0]][player_next_pos[1]] == 2)
-        if (player_next_pos[0]==finalX && player_next_pos[1]==finalY)
-        {
-            //finalX = player_next_pos[0];
-            //finalY = player_next_pos[1];
-=======
+
         if(maze[player_next_pos[0]][player_next_pos[1]] == 2)
         {
->>>>>>> f552cc2f5a68a513970516d515080589696058a4
             sound.playStart();
             return true;
         }
@@ -174,78 +167,6 @@ public class MazeGame extends Game
     {
         if(tile_id == DIR_UP)
         {
-<<<<<<< HEAD
-            if (player[0]!=0 && !horizontalLines[player[1]-1][player[0]]) {
-                player_next_pos[0]++;
-            }
-        }
-
-        if(tile_id == DIR_DOWN)
-        {
-            if (player[0]!=y-1 && !horizontalLines[player[1]][player[0]]) {
-                player_next_pos[0]--;
-            }
-        }
-
-        if(tile_id == DIR_LEFT)
-        {
-            if (player[0]!=0 && !verticalLines[player[1]][player[0]-1]) {
-                player_next_pos[1]--;
-            }
-        }
-
-        if(tile_id == DIR_RIGHT)
-        {
-            if (player[0]!=x-1 && !verticalLines[player[1]][player[0]]) {
-                player_next_pos[1]++;
-            }
-        }
-    }
-
-    public int getFinalX(){
-        return finalX;
-    }
-
-    public int getFinalY(){
-        return finalY;
-    }
-
-    public boolean[][] getHorizontalLines() {
-        return horizontalLines;
-    }
-
-    public boolean[][] getVerticalLines() {
-        return verticalLines;
-    }
-
-    public int getCurrentX(){
-        return player[0];
-    }
-
-    public int getCurrentY(){
-        return player[1];
-    }
-
-    public void setStartPosition(int i, int j){
-        player[0] = i;
-        player[1] = j;
-    }
-
-    public void setFinalPosition(int i, int j){
-        finalX = i;
-        finalY = j;
-    }
-
-    public void setHorizontalLines(boolean[][] lines){
-        horizontalLines = lines;
-        x = horizontalLines[0].length;
-    }
-
-    public void setVerticalLines(boolean[][] lines){
-        verticalLines = lines;
-        y = verticalLines.length;
-    }
-=======
             player_next_pos[0]++;
         }
         else if(tile_id == DIR_DOWN)
@@ -261,8 +182,6 @@ public class MazeGame extends Game
             player_next_pos[1]++;
         }
     }
-
->>>>>>> f552cc2f5a68a513970516d515080589696058a4
 
     public void initView() // Yichen, initialising the maze into array
     {
@@ -345,5 +264,49 @@ public class MazeGame extends Game
                     {1, 0, 0, 0, 0, 0, 1, 0, 0, 0}};
             maze = maze2;
         }
+    }
+    
+     public int getFinalX(){
+        return finalX;
+    }
+
+    public int getFinalY(){
+        return finalY;
+    }
+
+    public boolean[][] getHorizontalLines() {
+        return horizontalLines;
+    }
+
+    public boolean[][] getVerticalLines() {
+        return verticalLines;
+    }
+
+    public int getCurrentX(){
+        return player[0];
+    }
+
+    public int getCurrentY(){
+        return player[1];
+    }
+
+    public void setStartPosition(int i, int j){
+        player[0] = i;
+        player[1] = j;
+    }
+
+    public void setFinalPosition(int i, int j){
+        finalX = i;
+        finalY = j;
+    }
+
+    public void setHorizontalLines(boolean[][] lines){
+        horizontalLines = lines;
+        x = horizontalLines[0].length;
+    }
+
+    public void setVerticalLines(boolean[][] lines){
+        verticalLines = lines;
+        y = verticalLines.length;
     }
 }
