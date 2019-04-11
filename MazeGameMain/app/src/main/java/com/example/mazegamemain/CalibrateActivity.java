@@ -44,7 +44,7 @@ public class CalibrateActivity extends AppCompatActivity implements OnAntEventLi
         });
 
 
-        /*button_StartCalibrate.findViewById(R.id.button_StartCalibrate);
+        button_StartCalibrate.findViewById(R.id.button_StartCalibrate);
         button_StartCalibrate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +65,7 @@ public class CalibrateActivity extends AppCompatActivity implements OnAntEventLi
                 }
                 isCalibrating = !isCalibrating;
             }
-        });*/
+        });
 
         calibrate_instructions = findViewById(R.id.calibrate_instructions);
         calibrate_instructions.setText("Press on 'Start Calibration', then press on tiles up, right, down, left and 'End Calibration'");
