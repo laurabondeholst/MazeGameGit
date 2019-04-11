@@ -24,6 +24,7 @@ public class MazeGame extends Game
     static byte DIR_LEFT = 3;
     static byte SPRITE_COLOR = 3;
 
+<<<<<<< HEAD
     int x; // width of screen
     int y; // length of screen
     int step = 1; // the length of one step
@@ -36,14 +37,23 @@ public class MazeGame extends Game
         return y;
     }
 
+=======
+    int x = 10; // width of screen
+    int y = 10; // length of screen
+    int step = 1; // the length of one step
+
+>>>>>>> f552cc2f5a68a513970516d515080589696058a4
 
     int[] player = new int[3]; // contains players position (x,y) and number of hit in walls
     int[] player_next_pos = new int[2]; // contains players next position (x,y)
     int[][] maze = new int[x][y];
+<<<<<<< HEAD
     int finalX, finalY; // stores the finishing of maze
     boolean[][] verticalLines;
     boolean[][] horizontalLines;
 
+=======
+>>>>>>> f552cc2f5a68a513970516d515080589696058a4
 
     MotoConnection connection = MotoConnection.getInstance();
     MotoSound sound = MotoSound.getInstance();
@@ -72,7 +82,11 @@ public class MazeGame extends Game
         sound.playStart();
 
         initView();
+<<<<<<< HEAD
         //getMaze(1);
+=======
+        adaptMaze(1);
+>>>>>>> f552cc2f5a68a513970516d515080589696058a4
         displayMaze();
         initSprite();
     }
@@ -149,22 +163,31 @@ public class MazeGame extends Game
 
     public boolean checkGoalReached() // Laura, if goal reached, return true
     {
+<<<<<<< HEAD
         //if(maze[player_next_pos[0]][player_next_pos[1]] == 2)
         if (player_next_pos[0]==finalX && player_next_pos[1]==finalY)
         {
             //finalX = player_next_pos[0];
             //finalY = player_next_pos[1];
+=======
+        if(maze[player_next_pos[0]][player_next_pos[1]] == 2)
+        {
+>>>>>>> f552cc2f5a68a513970516d515080589696058a4
             sound.playStart();
             return true;
         }
         return false;
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f552cc2f5a68a513970516d515080589696058a4
     public void trackDirection(int tile_id) // Laura, what a hardcore method wauw
     {
         if(tile_id == DIR_UP)
         {
+<<<<<<< HEAD
             if (player[0]!=0 && !horizontalLines[player[1]-1][player[0]]) {
                 player_next_pos[0]++;
             }
@@ -235,6 +258,24 @@ public class MazeGame extends Game
         verticalLines = lines;
         y = verticalLines.length;
     }
+=======
+            player_next_pos[0]++;
+        }
+        else if(tile_id == DIR_DOWN)
+        {
+            player_next_pos[0]--;
+        }
+        else if(tile_id == DIR_LEFT)
+        {
+            player_next_pos[1]--;
+        }
+        else if(tile_id == DIR_RIGHT)
+        {
+            player_next_pos[1]++;
+        }
+    }
+
+>>>>>>> f552cc2f5a68a513970516d515080589696058a4
 
     public void initView() // Yichen, initialising the maze into array
     {
@@ -283,6 +324,7 @@ public class MazeGame extends Game
         }
     }
 
+<<<<<<< HEAD
 
 //    public void adaptMaze(int number)
 //    {
@@ -318,5 +360,41 @@ public class MazeGame extends Game
 //            maze = maze2;
 //        }
 //    }
+=======
+    public void adaptMaze(int number)
+    {
+        if(number == 1) {
+            int[][] maze1 = {
+                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 2},
+                    {0, 0, 0, 0, 0, 0, 1, 0, 1, 1},
+                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 1, 1, 1, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 3, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+            maze = maze1;
+        }
+        if (number == 2)
+        {
+            int[][] maze2 = {
+                    {1, 0, 1, 0, 0, 0, 1, 0, 0, 2},
+                    {1, 0, 1, 0, 1, 0, 1, 0, 1, 1},
+                    {1, 0, 0, 0, 1, 0, 1, 0, 0, 0},
+                    {1, 0, 1, 1, 1, 0, 1, 1, 1, 0},
+                    {1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
+                    {1, 0, 1, 1, 1, 1, 1, 0, 1, 0},
+                    {1, 0, 0, 3, 0, 0, 1, 0, 0, 0},
+                    {1, 1, 1, 0, 1, 0, 1, 1, 1, 1},
+                    {1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+                    {1, 0, 1, 0, 1, 1, 1, 1, 1, 0},
+                    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0}};
+            maze = maze2;
+        }
+    }
+>>>>>>> f552cc2f5a68a513970516d515080589696058a4
 
 }

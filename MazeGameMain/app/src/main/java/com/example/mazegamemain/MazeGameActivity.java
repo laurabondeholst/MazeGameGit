@@ -9,12 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.livelife.motolibrary.MotoConnection;
+
 /*
     This draws the maze and traces movement of the ball
  */
 
 public class MazeGameActivity extends View {
 
+<<<<<<< HEAD
     private int width, height, lineWidth; //width and height of the whole maze and width of lines which make the walls
     private int mazeSizeX, mazeSizeY; //size of the maze i.e. number of cells in it
     float cellWidth, cellHeight; //width and height of cells in the maze
@@ -57,6 +60,13 @@ public class MazeGameActivity extends View {
         totalCellHeight = cellHeight+lineWidth;
         red.setTextSize(cellHeight*0.75f);
         super.onSizeChanged(w, h, oldw, oldh);
+=======
+    // hello my friend
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maze_game);
+>>>>>>> f552cc2f5a68a513970516d515080589696058a4
     }
 
     protected void onDraw(Canvas canvas) {
