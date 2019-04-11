@@ -24,8 +24,8 @@ public class MazeGame extends Game
     static byte DIR_LEFT = 3;
     static byte SPRITE_COLOR = 3;
 
-    int x; // width of screen
-    int y; // length of screen
+    int x; // width of maze
+    int y; // height of maze
     int step = 1; // the length of one step
 
     public int getMazeWidth(){
@@ -264,11 +264,28 @@ public class MazeGame extends Game
         }
     }
     
-     public int getFinalX(){ // Yichen
+    protected void checkFinalPos()
+    {
+         for(int i = 0; i< x; i++)
+         {
+            for(int j = 0; i< y; i++)
+             {
+                    if(maze[i][j] == 2;
+                    {
+                        finalX = i;
+                        finalY = j;
+                    }
+             }
+         }
+    }
+    
+     public int getFinalX(){ // Yichen & Laura
+        checkFinalPos();
         return finalX;
     }
 
     public int getFinalY(){// Yichen
+        checkFinalPos();
         return finalY;
     }
 
@@ -283,7 +300,7 @@ public class MazeGame extends Game
     public void setStartPosition(int i, int j){// Yichen
         player[0] = i;
         player[1] = j;
-        mae[i][j] = 3;
+        maze[i][j] = 3;
     }
 
     public void setFinalPosition(int i, int j){// Yichen
