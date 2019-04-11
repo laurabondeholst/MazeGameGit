@@ -28,11 +28,13 @@ public class MazeGameActivity extends View {
     private Activity context;
     private Paint line, red, background;
 
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maze_game);
     }
+    */
     
     public MazeGameActivity(Context context, MazeGame maze){ // Yichen
         super(context);
