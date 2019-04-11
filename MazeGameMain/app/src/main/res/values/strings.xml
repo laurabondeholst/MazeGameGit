@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MazeGameMain</string>
+    <string name="btn_newgame">New Game</string>
+    <string name="btn_exit">Exit</string>
+    <string name="levelSelect">Select Maze</string>
+    <string name="finished_title">Congrats</string>
+    <string name="finished_text">Level Updates</string>
+    <string name="finished_button">End Game</string>
+
 </resources>
