@@ -42,7 +42,7 @@ public class MazeGame extends Game
     int[][] maze = new int[x][y]; // 0 means empty field, 1 means wall, 2 means goal, 3 means start pos
 
     int finalX, finalY; // stores the finishing of maze
-
+    boolean checkGoalReached;
 
 
     MotoConnection connection = MotoConnection.getInstance();
@@ -149,36 +149,43 @@ public class MazeGame extends Game
     }
 
 
-    public boolean checkGoalReached() // Laura, if goal reached, return true
+    public boolean trackDirection(int tile_id) // Laura, what a hardcore method wauw
     {
-
-        if(maze[player_next_pos[0]][player_next_pos[1]] == 2)
-        {
-            sound.playStart();
-            return true;
-        }
-        return false;
-    }
-
-
-    public void trackDirection(int tile_id) // Laura, what a hardcore method wauw
-    {
+        boolean tracked = false;
         if(tile_id == DIR_UP)
         {
             player_next_pos[0]++;
+            tracked = true;
         }
-        else if(tile_id == DIR_DOWN)
+        if(tile_id == DIR_DOWN)
         {
             player_next_pos[0]--;
+            tracked = true;
         }
-        else if(tile_id == DIR_LEFT)
+        if(tile_id == DIR_LEFT)
         {
             player_next_pos[1]--;
+            tracked = true;
         }
-        else if(tile_id == DIR_RIGHT)
+        if(tile_id == DIR_RIGHT)
         {
             player_next_pos[1]++;
+            tracked = true;
         }
+        if (tracked)
+        {
+            if(maze[player_next_pos[0]][player_next_pos[1]] == 2)
+            {
+                sound.playStart();
+                checkGoalReached = true;
+            }
+        }
+        return tracked;
+    }
+
+    public boolean checkGoalReached() // Laura, if goal reached, return true
+    {
+        return checkGoalReached;
     }
 
     public void initView() // Yichen, initialising the maze into array
@@ -231,36 +238,41 @@ public class MazeGame extends Game
 
     public void adaptMaze(int number)
     {
-        if(number == 1) {
-            int[][] maze1 = {
-                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 2},
-                    {0, 0, 0, 0, 0, 0, 1, 0, 1, 1},
-                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 1, 1, 1, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 3, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-            maze = maze1;
+        if(number == 1 ) {
+//            int[][] maze1 = {
+//                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 2},
+//                    {0, 0, 0, 0, 0, 0, 1, 0, 1, 1},
+//                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 1, 1, 1, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 3, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+            MazeGame maze1 = MazeCreator.adaptMaze(1);
         }
         if (number == 2)
         {
-            int[][] maze2 = {
-                    {1, 0, 1, 0, 0, 0, 1, 0, 0, 2},
-                    {1, 0, 1, 0, 1, 0, 1, 0, 1, 1},
-                    {1, 0, 0, 0, 1, 0, 1, 0, 0, 0},
-                    {1, 0, 1, 1, 1, 0, 1, 1, 1, 0},
-                    {1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
-                    {1, 0, 1, 1, 1, 1, 1, 0, 1, 0},
-                    {1, 0, 0, 3, 0, 0, 1, 0, 0, 0},
-                    {1, 1, 1, 0, 1, 0, 1, 1, 1, 1},
-                    {1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
-                    {1, 0, 1, 0, 1, 1, 1, 1, 1, 0},
-                    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0}};
-            maze = maze2;
+//            int[][] maze2 = {
+//                    {1, 0, 1, 0, 0, 0, 1, 0, 0, 2},
+//                    {1, 0, 1, 0, 1, 0, 1, 0, 1, 1},
+//                    {1, 0, 0, 0, 1, 0, 1, 0, 0, 0},
+//                    {1, 0, 1, 1, 1, 0, 1, 1, 1, 0},
+//                    {1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
+//                    {1, 0, 1, 1, 1, 1, 1, 0, 1, 0},
+//                    {1, 0, 0, 3, 0, 0, 1, 0, 0, 0},
+//                    {1, 1, 1, 0, 1, 0, 1, 1, 1, 1},
+//                    {1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+//                    {1, 0, 1, 0, 1, 1, 1, 1, 1, 0},
+//                    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0}};
+   //        maze = maze2;
+            MazeGame maze2 = MazeCreator.adaptMaze(2);
+        }
+        if (number == 3)
+        {
+            MazeGame maze3 = MazeCreator.adaptMaze(3);
         }
     }
     
@@ -283,13 +295,21 @@ public class MazeGame extends Game
     public void setStartPosition(int i, int j){// Yichen
         player[0] = i;
         player[1] = j;
-        mae[i][j] = 3;
+        maze[i][j] = 3;
     }
 
     public void setFinalPosition(int i, int j){// Yichen
         finalX = i;
         finalY = j;
         maze[i][j] = 2;
+    }
+
+    public void setLines(int[][] lines){
+        maze = lines;
+    }
+
+    public int[][] getLines(){
+        return maze;
     }
 
 }
