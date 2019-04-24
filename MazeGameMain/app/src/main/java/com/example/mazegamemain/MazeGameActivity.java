@@ -2,14 +2,20 @@ package com.example.mazegamemain;
 // comment
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import static com.livelife.motolibrary.AntData.EVENT_PRESS;
 
+import com.livelife.motolibrary.AntData;
 import com.livelife.motolibrary.MotoConnection;
 
 /*
@@ -43,11 +49,13 @@ public class MazeGameActivity extends View {
         mazeSizeX = maze.getMazeWidth();
         mazeSizeY = maze.getMazeHeight();
         line = new Paint();
-        line.setColor(getResources().getColor(R.color.line));
+        line.setColor(Color.BLACK);
         red = new Paint();
-        red.setColor(getResources().getColor(R.color.position));
+        red.setColor(Color.RED);
+        //red.setColor(getResources().getColor(R.color.position));
         background = new Paint();
-        background.setColor(getResources().getColor(R.color.game_bg));
+        background.setColor(Color.WHITE);
+        //background.setColor(getResources().getColor(R.color.game_bg));
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) { // Yichen
@@ -63,41 +71,52 @@ public class MazeGameActivity extends View {
     }
    
     protected void onDraw(Canvas canvas) { // Yichen
-        //fill in the background
-        canvas.drawRect(0, 0, width, height, background);
-        boolean[][] hLines = maze.getHorizontalLines();
-        boolean[][] vLines = maze.getVerticalLines();
+
+        canvas.drawRect(0, 0, width, height, background); //fill in the background
+        //boolean[][] hLines = maze.getHorizontalLines();
+        //boolean[][] vLines = maze.getVerticalLines();
         //iterate over the boolean arrays to draw walls
+        int [][] mazeNu = maze.getLines();
         for (int i = 0; i < mazeSizeX; i++) {
             for (int j = 0; j < mazeSizeY; j++) {
-                 if(maze[i][j]  == 1)
+                 if(mazeNu[i][j]  == 1)
                  {
-                    // draw square;
+                     line.setStyle(Paint.Style.FILL);
+                    canvas.drawRect(i, j, i+1, j+1, line);
+                     // draw square;
                  }
-                else if maze[i][j] == 1
+                else if (mazeNu[i][j] == 0)
                 {
+                    background.setStyle(Paint.Style.FILL);
+                    canvas.drawRect(i, j, i+1, j+1, background);
                    // draw space;   
                 }
-                /*
-                float x = j * totalCellWidth;
-                float y = i * totalCellHeight;
-                if (j < mazeSizeX - 1 && vLines[i][j]) {
-                    //we'll draw a vertical line
-                    canvas.drawLine(x + cellWidth,   //start X
-                            y,               //start Y
-                            x + cellWidth,   //stop X
-                            y + cellHeight,  //stop Y
-                            line);
-                }
-                if (i < mazeSizeY - 1 && hLines[i][j]) {
-                    //we'll draw a horizontal line
-                    canvas.drawLine(x,               //startX
-                            y + cellHeight,  //startY
-                            x + cellWidth,   //stopX
-                            y + cellHeight,  //stopY
-                            line);
-                }
-                */
+                 else if (mazeNu[i][j] == 3) //start point
+                 {
+                     background.setStyle(Paint.Style.FILL);
+                     canvas.drawRect(i, j, i+1, j+1, background);
+                     // draw space;
+                 }
+
+//                float x = j * totalCellWidth;
+//                float y = i * totalCellHeight;
+//                if (j < mazeSizeX - 1 && vLines[i][j]) {
+//                    //we'll draw a vertical line
+//                    canvas.drawLine(x + cellWidth,   //start X
+//                            y,               //start Y
+//                            x + cellWidth,   //stop X
+//                            y + cellHeight,  //stop Y
+//                            line);
+//                }
+//                if (i < mazeSizeY - 1 && hLines[i][j]) {
+//                    //we'll draw a horizontal line
+//                    canvas.drawLine(x,               //startX
+//                            y + cellHeight,  //startY
+//                            x + cellWidth,   //stopX
+//                            y + cellHeight,  //stopY
+//                            line);
+//                }
+//
             }
         }
         int currentX = maze.getCurrentX();
@@ -108,12 +127,55 @@ public class MazeGameActivity extends View {
                 (cellWidth * 0.45f),                           //radius
                 red);
         //draw the finishing point indicator
-        canvas.drawText("F",
+        canvas.drawText("GOAL",
                 (mazeFinishX * totalCellWidth) + (cellWidth * 0.25f),
                 (mazeFinishY * totalCellHeight) + (cellHeight * 0.75f),
                 red);
     }
 
     //here writes movement of the ball
+    @Override
+    public boolean press(int tile_id){ //when press tiles, the ball moves
+        boolean traced = false;
+            switch (tile_id) {
+                case tile_id == UP: // michael, define each direction
+                    traced = maze.trackDirection(MazeGame.DIR_UP);
+                    break;
+                case tile_id == DOWN:
+                    traced = maze.trackDirection(MazeGame.DIR_DOWN);
+                    break;
+                case tile_id == LEFT:
+                    traced = maze.trackDirection(MazeGame.DIR_LEFT);
+                    break;
+                case tile_id == RIGHT:
+                    traced = maze.trackDirection(MazeGame.DIR_RIGHT);
+                    break;
+            }
+
+        if (traced){ //as the ball moved, we have to redraw the maze
+            invalidate();
+            if (maze.checkGoalReached()){ // if reach the goal, show finish window
+                AlertDialog.Builder builder = new AlertDialog.Builder(context); //show texts and press button
+                builder.setTitle(context.getText(R.string.finished_title)); //show finish texts
+                LayoutInflater inflater = context.getLayoutInflater();
+                View view = inflater.inflate(R.layouut.finish, null);
+                builder.setView(view);
+                View exitGame = view.findViewById(R.id.exitGame);
+                exitGame.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View clicked) {
+                        if (clicked.getId()==R.id.exitGame){
+                            context.finish();
+                        }
+                    }
+                });
+                AlertDialog finishDialog = builder.create();
+                finishDialog.show();
+
+            }
+        }
+        return true;
+    }
+
 
 }
