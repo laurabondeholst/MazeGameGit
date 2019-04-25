@@ -225,7 +225,7 @@ public class MazeGame extends Game
 
     public void initSprite()
     {
-        checkPlayerSprite();
+        // checkPlayerSprite(); // has not yet been created
         player_next_pos[0] = player[0];
         player_next_pos[1] = player[1];
     }
@@ -272,7 +272,7 @@ public class MazeGame extends Game
          {
             for(int j = 0; i< y; i++)
              {
-                    if(maze[i][j] == 2;
+                    if(maze[i][j] == 2)
                     {
                         finalX = i;
                         finalY = j;
@@ -287,7 +287,7 @@ public class MazeGame extends Game
          {
             for(int j = 0; i< y; i++)
              {
-                    if(maze[i][j] == 3;
+                    if(maze[i][j] == 3)
                     {
                         player[0] = i;
                         player[1] = j;
@@ -315,13 +315,13 @@ public class MazeGame extends Game
     }
 
     public void setStartPosition(int i, int j){
-        for(int i = 0; i< x; i++)
+        for(int k = 0; k< x; k++)
          {
-            for(int j = 0; i< y; i++)
+            for(int l = 0; l< y; l++)
              {
-                    if(maze[i][j] == 3;
+                    if(maze[k][l] == 3)
                     {
-                        maze[i][j] = 0; //resetting the final pos
+                        maze[k][l] = 0; //resetting the final pos
                     }
              }
          }
@@ -331,13 +331,13 @@ public class MazeGame extends Game
     }
 
     public void setFinalPosition(int i, int j){
-        for(int i = 0; i< x; i++)
+        for(int k = 0; k< x; k++)
          {
-            for(int j = 0; i< y; i++)
+            for(int l = 0; l< y; l++)
              {
-                    if(maze[i][j] == 2;
+                    if(maze[k][l] == 2)
                     {
-                        maze[i][j] = 0; //resetting the final pos from prev
+                        maze[k][l] = 0; //resetting the final pos from prev
                     }
              }
          }
