@@ -9,43 +9,48 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
+import com.livelife.motolibrary.AntData;
 import com.livelife.motolibrary.Game;
+import com.livelife.motolibrary.GameType;
 import com.livelife.motolibrary.MotoConnection;
 import com.livelife.motolibrary.MotoSound;
 import com.livelife.motolibrary.OnAntEventListener;
 
+import static com.livelife.motolibrary.AntData.EVENT_PRESS;
 import static com.livelife.motolibrary.AntData.LED_COLOR_BLUE;
 import static com.livelife.motolibrary.AntData.LED_COLOR_GREEN;
+import static com.livelife.motolibrary.AntData.LED_COLOR_OFF;
 import static com.livelife.motolibrary.AntData.LED_COLOR_ORANGE;
 import static com.livelife.motolibrary.AntData.LED_COLOR_RED;
 
-/*
-    Consist of "start game" and init of tiles
+public class MainActivity extends AppCompatActivity implements OnAntEventListener {
+    //Michael
 
-    So Yichen is doing the layout on the tablet, Laura is doing the edge detection
-    and Michael is doing user interference.
-
- */
-
-public class MainActivity extends AppCompatActivity implements OnAntEventListener, View.OnClickListener {
-
+    MazeGame mazeGame;
     MotoConnection connection;
     MotoSound sound;
+    boolean isPairing = false;
+    public static byte SPRITE_COLOR = 3;
 
     //buttons
     Button button_pairing;
-    Button startGame;
-    Button exitGame;
-
-    boolean isPairing = false;
+    Button button_calibrate;
+    Button button_easy;
+    Button button_medium;
+    Button button_hard;
+    Button button_colorRed;
+    Button button_colorGreen;
+    Button button_colorBlue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //mazeGame = new MazeGame();
+
         // connecting to the tiles
-        connection=MotoConnection.getInstance();
+        connection = MotoConnection.getInstance();
         connection.startMotoConnection(MainActivity.this);
         connection.saveRfFrequency(56); //(Group No.)*10+6
         connection.setDeviceId(5); //Your group number
@@ -73,7 +78,94 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
             }
         });
 
-        //start game and exit game button
+        //calibrate button for swapping to CalibrateActivity
+        button_calibrate = findViewById(R.id.button_calibrate);
+        button_calibrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connection.unregisterListener(MainActivity.this);
+                Intent i = new Intent(MainActivity.this, CalibrateActivity.class);
+                startActivity(i);
+            }
+        });
+
+        //button for picking red colored sprite
+        button_colorRed = findViewById(R.id.button_colorRed);
+        button_colorRed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SPRITE_COLOR = LED_COLOR_RED;
+            }
+        });
+
+        //button for picking green colored sprite
+        button_colorGreen = findViewById(R.id.button_colorGreen);
+        button_colorGreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SPRITE_COLOR = LED_COLOR_GREEN;
+            }
+        });
+
+        //button for picking blue colored sprite
+        button_colorBlue = findViewById(R.id.button_colorBlue);
+        button_colorBlue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SPRITE_COLOR = LED_COLOR_BLUE;
+            }
+        });
+
+        //button for starting the game on easy difficulty
+        button_easy = findViewById(R.id.button_easy);
+        button_easy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MazeGameActivity = new Intent(MainActivity.this, MazeGameActivity.class); //create an Intent to launch the game activity
+                //final GameType gt;
+                //mazeGame.getGameTypes();
+                //mazeGame.selectedGameType = gt; //change "gt" to "easy"?
+
+                sound.playStart();
+                startActivity(MazeGameActivity);
+
+            }
+        });
+
+        //button for starting the game on medium difficulty
+        button_medium = findViewById(R.id.button_medium);
+        button_medium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MazeGameActivity = new Intent(MainActivity.this, MazeGameActivity.class); //create an Intent to launch the game activity
+
+                //mazeGame.getGameTypes();
+                //mazeGame.selectedGameType = gt2;  //change "gt2" to "medium"?
+
+                sound.playStart();
+                startActivity(MazeGameActivity);
+
+            }
+        });
+
+        //button for starting the game on hard difficulty
+        button_hard = findViewById(R.id.button_hard);
+        button_hard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MazeGameActivity = new Intent(MainActivity.this, MazeGameActivity.class); //create an Intent to launch the game activity
+
+                //mazeGame.getGameTypes();
+                //mazeGame.selectedGameType = gt3;  //change "gt3" to "hard"?
+
+                sound.playStart();
+                startActivity(MazeGameActivity);
+
+            }
+        });
+    }
+
+        /*//start game and exit game button
         startGame = findViewById(R.id.startGame);
         exitGame = findViewById(R.id.exitGame);
         startGame.setOnClickListener(this);
@@ -106,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
 
 
 
-    }
+    }*/
 
     @Override
     public void onMessageReceived(byte[] bytes, long l)
@@ -134,6 +226,8 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
     protected void onRestart() {
         super.onRestart();
         connection.registerListener(MainActivity.this);
+        connection.registerListener(this);
+        connection.startMotoConnection(MainActivity.this);
     }
     @Override
     protected void onDestroy() {
@@ -142,8 +236,4 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
         connection.unregisterListener(MainActivity.this);
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 }
