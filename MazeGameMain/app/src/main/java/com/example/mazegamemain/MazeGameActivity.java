@@ -13,10 +13,14 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
 import static com.livelife.motolibrary.AntData.EVENT_PRESS;
 
 import com.livelife.motolibrary.AntData;
 import com.livelife.motolibrary.Game;
+import com.livelife.motolibrary.GameType;
 import com.livelife.motolibrary.MotoConnection;
 import com.livelife.motolibrary.MotoSound;
 import com.livelife.motolibrary.OnAntEventListener;
@@ -31,6 +35,8 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
     MotoConnection connection = MotoConnection.getInstance();
     MotoSound sound = MotoSound.getInstance();
     MazeGame mazeGame;
+
+    LinearLayout gameTypeContainer;
 
     private int width, height, lineWidth; //width and height of the whole maze and width of lines which make the walls
     private int mazeSizeX, mazeSizeY; //size of the maze i.e. number of cells in it
@@ -77,12 +83,41 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
 
             }
         });
+
+        createGameButtons();
     }
 
 
+    public void createGameButtons()
+    {
+        gameTypeContainer = findViewById(R.id.gameTypeContainer);
+        if(gameTypeContainer.getChildCount() > 0)
+        {
+            gameTypeContainer.removeAllViews();
+        }
+        for(final GameType gt: mazeGame.getGameTypes())
+        {
+            Button b = new Button(this);
+            b.setOnClickListener(new View.OnClickListener()
+                                 { // this action creates a function for the button, and defineres the gt for this button
+                                     @Override
+                                     public void onClick(View view)
+                                     {
+                                         mazeGame.selectedGameType = gt;
+                                         sound.playStart();
+                                         mazeGame.startGame();
+                                         // this way we start a game, but now the game is a new listener.
+                                     }
+                                 }
+            );
+            b.setText(gt.getName());
+            gameTypeContainer.addView(b);
+        }
+    }
 
     @Override
     public void onMessageReceived(byte[] bytes, long l) {
+        mazeGame.addEvent(bytes); // forwarding events
 
     }
 
@@ -94,6 +129,13 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
     @Override
     public void onNumbersOfTilesConnected(int i) {
 
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        connection.unregisterListener(this);
     }
 
 
