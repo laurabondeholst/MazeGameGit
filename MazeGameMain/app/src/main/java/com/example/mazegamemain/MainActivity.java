@@ -125,8 +125,9 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
                 //final GameType gt;
                 //mazeGame.getGameTypes();
                 //mazeGame.selectedGameType = gt; //change "gt" to "easy"?
-
+                
                 sound.playStart();
+                connection.unregisterListener(MainActivity.this);
                 startActivity(MazeGameActivity);
 
             }
