@@ -7,16 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.livelife.motolibrary.AntData;
 import com.livelife.motolibrary.MotoConnection;
 import com.livelife.motolibrary.OnAntEventListener;
 
-import static com.livelife.motolibrary.AntData.EVENT_PRESS;
-
 public class CalibrateActivity extends AppCompatActivity implements OnAntEventListener {
+    //Michael
 
     MotoConnection connection;
-    CalibrateActivity calibrateActivity;
 
     //UI text
     TextView calibrate_instructions;
@@ -24,40 +21,38 @@ public class CalibrateActivity extends AppCompatActivity implements OnAntEventLi
     //buttons
     Button button_StartCalibrate;
     Button button_EndCalibrate;
-    int currentTile;
     boolean isCalibrating = false;
+    byte SELECTED_SPRITE_COLOR = MainActivity.SPRITE_COLOR;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calibrate);
 
-        calibrateActivity = new CalibrateActivity();
+        connection = MotoConnection.getInstance();
+        connection.registerListener(CalibrateActivity.this);
 
         button_EndCalibrate = findViewById(R.id.button_EndCalibrate);
         button_EndCalibrate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                connection.unregisterListener(CalibrateActivity.this);
                 Intent i = new Intent(CalibrateActivity.this, MainActivity.class);
                 startActivity(i);
             }
         });
 
 
-        button_StartCalibrate.findViewById(R.id.button_StartCalibrate);
+        button_StartCalibrate = findViewById(R.id.button_StartCalibrate);
         button_StartCalibrate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!isCalibrating){
-                    button_StartCalibrate.setText("Press on the tile you want to be up, right, down, left");
-                    int tile = EVENT_PRESS;
-                    for (int t: connection.connectedTiles) {
-                        if (tile==t) {
-                        connection.setTileNumLeds(AntData.LED_COLOR_GREEN,tile,3); //LED Arrows
 
-                        }
+                    for (int t = 0; t < 5; t++) {
+                            connection.setTileNumLeds(SELECTED_SPRITE_COLOR,t,3); //LED Arrows
                     }
-                    currentTile = tile;
                 }
 
                 else {
@@ -68,9 +63,11 @@ public class CalibrateActivity extends AppCompatActivity implements OnAntEventLi
         });
 
         calibrate_instructions = findViewById(R.id.calibrate_instructions);
-        calibrate_instructions.setText("Press on 'Start Calibration', then press on tiles up, right, down, left and 'End Calibration'");
+        calibrate_instructions.setText("Press on 'Start Calibration', then place the tiles so the LEDs point up, right, down, left and then press 'End Calibration'");
 
     }
+
+
 
     @Override
     public void onMessageReceived(byte[] bytes, long l)
@@ -98,6 +95,7 @@ public class CalibrateActivity extends AppCompatActivity implements OnAntEventLi
     protected void onRestart() {
         super.onRestart();
         connection.registerListener(CalibrateActivity.this);
+        connection.startMotoConnection(CalibrateActivity.this);
     }
     @Override
     protected void onDestroy() {
