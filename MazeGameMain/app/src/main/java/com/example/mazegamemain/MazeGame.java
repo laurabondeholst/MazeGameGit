@@ -24,14 +24,28 @@ public class MazeGame extends Game
     static byte DIR_LEFT = 3;
     static byte SPRITE_COLOR = 3;
 
-    int x = 10; // width of screen
-    int y = 10; // length of screen
+    int x; // width of screen
+    int y; // length of screen
     int step = 1; // the length of one step
+
+    public int getMazeWidth(){
+        return x;
+    }
+
+    public int getMazeHeight(){
+        return y;
+    }
 
 
     int[] player = new int[3]; // contains players position (x,y) and number of hit in walls
     int[] player_next_pos = new int[2]; // contains players next position (x,y)
     int[][] maze = new int[x][y];
+
+    int finalX, finalY; // stores the finishing of maze
+    boolean[][] verticalLines;
+    boolean[][] horizontalLines;
+
+
 
     MotoConnection connection = MotoConnection.getInstance();
     MotoSound sound = MotoSound.getInstance();
@@ -60,7 +74,9 @@ public class MazeGame extends Game
         sound.playStart();
 
         initView();
+
         adaptMaze(1);
+
         displayMaze();
         initSprite();
     }
@@ -96,7 +112,7 @@ public class MazeGame extends Game
     }
 
     public boolean checkMazeEdge() // Laura, returns false if player hits maze edge
-    {
+    {                           // this method assumes that player_next_pos is within boundaries
         int i = 0;
 
         int dir_x = player_next_pos[0]-player[0];
@@ -108,7 +124,7 @@ public class MazeGame extends Game
 
         while (i < step) // for each number in step, check for wall
         {
-            if(maze[player_next_pos[0]-i*dir_x][player_next_pos[1]-i*dir_y] != 0) // if next position of player equals a wall, change next position
+            if(maze[player_next_pos[0]-i*dir_x][player_next_pos[1]-i*dir_y] == 1) // if next position of player equals a wall, change next position
             {
                 // if player hit a wall, go back to original pos
                 player_next_pos[0] = player[0];
@@ -137,6 +153,7 @@ public class MazeGame extends Game
 
     public boolean checkGoalReached() // Laura, if goal reached, return true
     {
+
         if(maze[player_next_pos[0]][player_next_pos[1]] == 2)
         {
             sound.playStart();
@@ -144,6 +161,7 @@ public class MazeGame extends Game
         }
         return false;
     }
+
 
     public void trackDirection(int tile_id) // Laura, what a hardcore method wauw
     {
@@ -165,7 +183,6 @@ public class MazeGame extends Game
         }
     }
 
-
     public void initView() // Yichen, initialising the maze into array
     {
 
@@ -173,7 +190,7 @@ public class MazeGame extends Game
 
     private void displayMaze() // Yichen
     {
-        // when displaying the maze, please be aware of x/y orientation. 
+        // when displaying the maze, please be aware of x/y orientation.
     }
 
     public void initZeros() // Laura
@@ -213,6 +230,7 @@ public class MazeGame extends Game
         }
     }
 
+
     public void adaptMaze(int number)
     {
         if(number == 1) {
@@ -247,5 +265,48 @@ public class MazeGame extends Game
             maze = maze2;
         }
     }
+    
+     public int getFinalX(){
+        return finalX;
+    }
 
+    public int getFinalY(){
+        return finalY;
+    }
+
+    public boolean[][] getHorizontalLines() {
+        return horizontalLines;
+    }
+
+    public boolean[][] getVerticalLines() {
+        return verticalLines;
+    }
+
+    public int getCurrentX(){
+        return player[0];
+    }
+
+    public int getCurrentY(){
+        return player[1];
+    }
+
+    public void setStartPosition(int i, int j){
+        player[0] = i;
+        player[1] = j;
+    }
+
+    public void setFinalPosition(int i, int j){
+        finalX = i;
+        finalY = j;
+    }
+
+    public void setHorizontalLines(boolean[][] lines){
+        horizontalLines = lines;
+        x = horizontalLines[0].length;
+    }
+
+    public void setVerticalLines(boolean[][] lines){
+        verticalLines = lines;
+        y = verticalLines.length;
+    }
 }
