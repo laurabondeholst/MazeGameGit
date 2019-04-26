@@ -1,5 +1,12 @@
 package com.example.mazegamemain;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.view.View;
+
 import com.livelife.motolibrary.AntData;
 import com.livelife.motolibrary.Game;
 import com.livelife.motolibrary.GameType;
@@ -18,15 +25,18 @@ import static com.livelife.motolibrary.AntData.LED_COLOR_OFF;
 
 public class MazeGame extends Game
 {
-    static byte DIR_DOWN = 0;
-    static byte DIR_UP = 1;
-    static byte DIR_RIGHT = 2;
-    static byte DIR_LEFT = 3;
+    static byte DIR_DOWN = 1;
+    static byte DIR_LEFT = 2;
+    static byte DIR_UP = 3;
+    static byte DIR_RIGHT = 4;
     static byte SPRITE_COLOR = 3;
 
-    int x; // width of maze
-    int y; // height of maze
+    int x = 10; // width of maze
+    int y = 10; // height of maze
     int step = 1; // the length of one step
+
+
+    Canvas canvas;
 
     public int getMazeWidth(){
         return x;
@@ -68,15 +78,15 @@ public class MazeGame extends Game
     {
         super.onGameStart();
 
-        connection.setAllTilesIdle(LED_COLOR_OFF);
-        sound.playStart();
+        connection.setAllTilesColor(LED_COLOR_OFF);
 
-        initView();
+
 
         adaptMaze(1);
-
+        initView();
         displayMaze();
         initSprite();
+
     }
 
     @Override
@@ -88,9 +98,9 @@ public class MazeGame extends Game
         if(event == EVENT_PRESS)
         {
             int tile_id = AntData.getId(message);
-            connection.setTileColor(SPRITE_COLOR,tile_id);
+            sound.playPress1();
             trackDirection(tile_id);
-            if(checkGameEdge() && checkMazeEdge() )
+            if(checkGameEdge() && !checkMazeEdge() )
             {
                 if (checkGoalReached())
                 {
@@ -142,7 +152,7 @@ public class MazeGame extends Game
         {
             player[2] ++;
             sound.playError();
-            return true;
+            return false;
         }
 
         return true;
@@ -221,6 +231,8 @@ public class MazeGame extends Game
     {
         player[0] = player_next_pos[0];
         player[1] = player_next_pos[1];
+        incrementPlayerScore(1,0);
+
     }
 
     public void initSprite()
@@ -345,5 +357,14 @@ public class MazeGame extends Game
         finalY = j;
         maze[i][j] = 2;
     }
+
+    public void setLines(int[][] lines){
+        maze = lines;
+    }
+
+    public int[][] getLines(){
+        return maze;
+    }
+
 
 }
