@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
 
                 
                 mazeGame.selectedGameType = allGameTypes.get(1); //Laura
-                MazeCreator.adaptMaze(1)
+                MazeCreator.adaptMaze(1);
 
                 sound.playStart();
                 connection.unregisterListener(MainActivity.this);
