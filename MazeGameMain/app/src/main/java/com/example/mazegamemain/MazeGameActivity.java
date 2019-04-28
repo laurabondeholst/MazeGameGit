@@ -57,6 +57,8 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
 
     int animation_duration;
     float maze_to_screen_x,maze_to_screen_y;
+    
+    int colorARGB = Color.parseColor("#ff669900");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +169,16 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
     {
 
         spriteImage = findViewById(R.id.spriteImage);
+        if(MainActivity.SPRITE_COLOR == 1) {
+            colorARGB = Color.parseColor("#ffcc0000");
+        }
+        else if(MainActivity.SPRITE_COLOR == 2) {
+            colorARGB = Color.parseColor("#ff0099cc");
+        }
+        else if(MainActivity.SPRITE_COLOR == 3) {
+            colorARGB = Color.parseColor("#ff669900");
+        }
+        spriteImage.setColorFilter(colorARGB, PorterDuff.Mode.SRC_ATOP);
         animation_duration = 200;
         maze_to_screen_x = 1500f/10f;
         maze_to_screen_y = 1500f/10f;
