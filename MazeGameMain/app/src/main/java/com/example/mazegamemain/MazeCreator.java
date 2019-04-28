@@ -2,7 +2,7 @@ package com.example.mazegamemain;
 //this class creates mazes
 
 public class MazeCreator {
-    private static int[][] mazeNu;
+    public static int[][] mazeNu;
 
     public static MazeGame adaptMaze(int mazeNo) {
         MazeGame maze = null;
@@ -17,7 +17,6 @@ public class MazeCreator {
                     {0, 0, 0, 0, 1, 0, 0, 0, 1, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 3, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
@@ -56,7 +55,6 @@ public class MazeCreator {
                     {1, 0, 1, 1, 1, 0, 1, 1, 1, 0},
                     {1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
                     {1, 0, 1, 1, 1, 1, 1, 0, 0, 0},
-                    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0},
                     {1, 1, 1, 0, 1, 0, 1, 1, 0, 1},
                     {1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
                     {1, 0, 1, 0, 1, 1, 1, 1, 1, 0},
@@ -85,8 +83,8 @@ public class MazeCreator {
         // maze.setVerticalLines(vLines);
         //maze.setHorizontalLines(hLines);
         maze.setLines(mazeNu);
-        maze.setStartPosition(7, 0);
-        maze.setFinalPosition(0, 7);
+        maze.setStartPosition(9, 0);
+        maze.setFinalPosition(0, 9);
 
         if (mazeNo == 3) {
             maze = new MazeGame();
