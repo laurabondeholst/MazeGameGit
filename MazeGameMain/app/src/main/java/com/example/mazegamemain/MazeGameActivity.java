@@ -52,6 +52,7 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
     float cellWidth, cellHeight; //width and height of cells in the maze
     float totalCellWidth, totalCellHeight; //store result of cellWidth+lineWidth and cellHeight+lineWidth respectively
 
+    float maze_to_screen_x,maze_to_screen_y;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,12 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
         mazeGame = new MazeGame();
 
         connection.registerListener(MazeGameActivity.this);
+
+        MazeCreator.adaptMaze(1);
+
+
+        maze_to_screen_x = 1500f/10f;
+        maze_to_screen_y = 1500f/10f;
 
         int hej = 0;
         for(final GameType gt: mazeGame.getGameTypes())
@@ -77,6 +84,12 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
         {
             MazeCreator.adaptMaze(1);
         }
+
+        mazeSizeX = mazeGame.getMazeWidth();
+        mazeSizeY = mazeGame.getMazeHeight();
+
+        maze_to_screen_x = 1500f/mazeSizeX;
+        maze_to_screen_y = 1500f/mazeSizeY;
 
         gameView=new GameView(MazeGameActivity.this);
 
@@ -204,6 +217,7 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
             mazeSizeY = mazeGame.getMazeHeight();
             line = new Paint();
             line.setColor(Color.BLACK);
+           // line.setStrokeWidth(10);
             red = new Paint();
             red.setColor(Color.RED);
             background = new Paint();
@@ -224,31 +238,25 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
             canvas_game.drawRect(0, 0, width, height, background); //fill in the background
             //boolean[][] hLines = maze.getHorizontalLines();
             //boolean[][] vLines = maze.getVerticalLines();
-
+            int something = mazeSizeX;
 
             //iterate over the boolean arrays to draw walls
-            int [][] mazeNu = mazeGame.getLines();
+            int [][] mazeNu = MazeCreator.mazeNu;
             for (int i = 0; i < mazeSizeX; i++) {
                 for (int j = 0; j < mazeSizeY; j++) {
                     if(mazeNu[i][j]  == 1)
                     {
                         line.setStyle(Paint.Style.FILL);
-                        canvas_game.drawRect(i, j, i+totalCellHeight, j+totalCellHeight, line);
+                        canvas_game.drawRect((float)j*totalCellWidth, (float)i*totalCellHeight, (float)(j*totalCellWidth+totalCellWidth), (float)(i*totalCellHeight+totalCellHeight), line);
                         // draw square;
                     }
                 }
             }
 
-            // draw the ball
-//            canvas_game.drawCircle((mazeGame.getCurrentX() * totalCellWidth) + (cellWidth / 2),   //x of center
-//                    (mazeGame.getCurrentY() * totalCellHeight) + (cellWidth / 2),  //y of center
-//                    (cellWidth * 0.45f),                           //radius
-//                    red);
-
             //draw the finishing point indicator
-            canvas_game.drawText("GOAL",
-                    (mazeFinishX * totalCellWidth) + (cellWidth * 0.25f),
-                    (mazeFinishY * totalCellHeight) + (cellHeight * 0.75f),
+            canvas_game.drawText("F",
+                    (mazeFinishY * totalCellWidth) + (cellWidth * 0.25f),
+                    (mazeFinishX * totalCellHeight) + (cellHeight * 0.75f),
                     red);
 
         }
@@ -294,5 +302,4 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
 
 
 }
-
 
