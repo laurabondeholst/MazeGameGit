@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.livelife.motolibrary.AntData;
 import com.livelife.motolibrary.Game;
@@ -32,29 +31,16 @@ public class MazeGame extends Game
     static byte DIR_RIGHT = 4;
     static byte SPRITE_COLOR = 3;
 
-    int x = 10; // width of maze
-    int y = 10; // height of maze
+    int x ; // width of maze
+    int y ; // height of maze
     int step = 1; // the length of one step
 
 
     Canvas canvas;
-    ImageView spriteImage;
-
-
-
-
-    public int getMazeWidth(){
-        return x;
-    }
-
-    public int getMazeHeight(){
-        return y;
-    }
 
 
     int[] player = new int[3]; // contains players position (x,y) and number of hit in walls
     int[] player_next_pos = new int[2]; // contains players next position (x,y)
-    int[] player_old_pos = new int[2];
     int[][] maze = new int[x][y]; // 0 means empty field, 1 means wall, 2 means goal, 3 means start pos
 
     int finalX, finalY; // stores the finishing of maze
@@ -74,12 +60,8 @@ public class MazeGame extends Game
         GameType gt = new GameType(1, GameType.GAME_TYPE_SPEED,1, "No time restriction",1);
         addGameType(gt);
 
-        GameType gt2 = new GameType(2, GameType.GAME_TYPE_TIME,60, "Time limit: 60 sec",1);
+        GameType gt2 = new GameType(1, GameType.GAME_TYPE_TIME,60, "Time limit: 60 sec",1);
         addGameType(gt2);
-
-        GameType gt3= new GameType(3, GameType.GAME_TYPE_TIME,60, "Time limit: 60 sec",1);
-        addGameType(gt3);
-
 
     }
 
@@ -90,12 +72,18 @@ public class MazeGame extends Game
 
         connection.setAllTilesColor(LED_COLOR_OFF);
 
-        maze = MazeCreator.mazeNu;
 
-
+        maze=MazeCreator.mazeNu;
+        x = getMazeWidth();
+        y = getMazeHeight();
 
         checkStartPos();
         checkFinalPos();
+
+
+        initView();
+        displayMaze();
+        initSprite();
 
     }
 
@@ -183,36 +171,36 @@ public class MazeGame extends Game
 
     public void trackDirection(int tile_id) // Laura
     {
-        if(tile_id == DIR_RIGHT) // dir_up and dir_down are subtracting and adding respectively to the array, inorder to take care of the weird x/y coordinate system on the tablet
+        if(tile_id == DIR_UP)
         {
             if(player_next_pos[0] + 1 < x)
             {
                 player_next_pos[0]++;
-            }           
-        }
-        else if(tile_id == DIR_LEFT)
-        {
-            if(player_next_pos[0] -1 >= 0)
-            {
-                player_next_pos[0]--;
-            }         
-        }
-        else if(tile_id == DIR_UP)
-        {
-             if(player_next_pos[1] - 1 >= 0)
-            {
-                player_next_pos[1]--;
-            }         
+            }
         }
         else if(tile_id == DIR_DOWN)
         {
-             if(player_next_pos[1] + 1 < y)
+            if(player_next_pos[0] - 1 >= 0)
+            {
+                player_next_pos[0]--;
+            }
+        }
+        else if(tile_id == DIR_LEFT)
+        {
+            if(player_next_pos[1] - 1 >= 0)
+            {
+                player_next_pos[1]--;
+            }
+        }
+        else if(tile_id == DIR_RIGHT)
+        {
+            if(player_next_pos[1] + 1 < y)
             {
                 player_next_pos[1]++;
-            }         
+            }
         }
     }
-    
+
     public void initView() // Yichen, initialising the maze into array
     {
 
@@ -221,6 +209,7 @@ public class MazeGame extends Game
     private void displayMaze() // Yichen
     {
         // when displaying the maze, please be aware of x/y orientation.
+
     }
 
     public void initZeros() // Laura
@@ -239,8 +228,6 @@ public class MazeGame extends Game
 
     public void updatePlayerSprite()  // Laura
     {
-        player_old_pos[0] = player[0];
-        player_old_pos[1] = player[1];
         player[0] = player_next_pos[0];
         player[1] = player_next_pos[1];
         incrementPlayerScore(1,0);
@@ -258,75 +245,75 @@ public class MazeGame extends Game
     public void adaptMaze(int number)
     {
         if(number == 1) {
-            int[][] maze1 = {
-                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 2},
-                    {0, 0, 0, 0, 0, 0, 1, 0, 1, 1},
-                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 1, 1, 1, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 3, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-            maze = maze1;
+//            int[][] maze1 = {
+//                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 2},
+//                    {0, 0, 0, 0, 0, 0, 1, 0, 1, 1},
+//                    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 1, 1, 1, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 3, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+            MazeGame maze1 =  MazeCreator.adaptMaze(1);
         }
         if (number == 2)
         {
-            int[][] maze2 = {
-                    {1, 0, 1, 0, 0, 0, 1, 0, 0, 2},
-                    {1, 0, 1, 0, 1, 0, 1, 0, 1, 1},
-                    {1, 0, 0, 0, 1, 0, 1, 0, 0, 0},
-                    {1, 0, 1, 1, 1, 0, 1, 1, 1, 0},
-                    {1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
-                    {1, 0, 1, 1, 1, 1, 1, 0, 1, 0},
-                    {1, 0, 0, 3, 0, 0, 1, 0, 0, 0},
-                    {1, 1, 1, 0, 1, 0, 1, 1, 1, 1},
-                    {1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
-                    {1, 0, 1, 0, 1, 1, 1, 1, 1, 0},
-                    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0}};
-            maze = maze2;
+//            int[][] maze2 = {
+//                    {1, 0, 1, 0, 0, 0, 1, 0, 0, 2},
+//                    {1, 0, 1, 0, 1, 0, 1, 0, 1, 1},
+//                    {1, 0, 0, 0, 1, 0, 1, 0, 0, 0},
+//                    {1, 0, 1, 1, 1, 0, 1, 1, 1, 0},
+//                    {1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
+//                    {1, 0, 1, 1, 1, 1, 1, 0, 1, 0},
+//                    {1, 0, 0, 3, 0, 0, 1, 0, 0, 0},
+//                    {1, 1, 1, 0, 1, 0, 1, 1, 1, 1},
+//                    {1, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+//                    {1, 0, 1, 0, 1, 1, 1, 1, 1, 0},
+//                    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0}};
+//            maze = maze2;
+            MazeGame maze2 =  MazeCreator.adaptMaze(2);
         }
     }
-    
+
     protected void checkFinalPos()
     {
-         for(int i = 0; i< x; i++)
-         {
-            for(int j = 0; i< y; i++)
-             {
-                    if(maze[i][j] == 2)
-                    {
-                        finalX = i;
-                        finalY = j;
-                    }
-             }
-         }
+        for(int i = 0; i< x; i++)
+        {
+            for(int j = 0; j < y; j++)
+            {
+                if(maze[i][j] == 2)
+                {
+                    finalX = i;
+                    finalY = j;
+                }
+            }
+        }
     }
-    
+
     protected void checkStartPos()
     {
-         for(int i = 0; i< x; i++)
-         {
-            for(int j = 0; i< y; i++)
-             {
-                    if(maze[i][j] == 3)
-                    {
-                        player[0] = i;
-                        player[1] = j;
-                    }
-             }
-         }
+        for(int i = 0; i< x; i++)
+        {
+            for(int j = 0; j< y; j++)
+            {
+                if(maze[i][j] == 3)
+                {
+                    player[0] = i;
+                    player[1] = j;
+                }
+            }
+        }
     }
-    
-     public int getFinalX(){ // Yichen & Laura
-        checkFinalPos();
+
+
+    public int getFinalX(){ // Yichen & Laura
         return finalX;
     }
 
     public int getFinalY(){// Yichen
-        checkFinalPos();
         return finalY;
     }
 
@@ -340,15 +327,15 @@ public class MazeGame extends Game
 
     public void setStartPosition(int i, int j){
         for(int k = 0; k< x; k++)
-         {
+        {
             for(int l = 0; l< y; l++)
-             {
-                    if(maze[k][l] == 3)
-                    {
-                        maze[k][l] = 0; //resetting the final pos
-                    }
-             }
-         }
+            {
+                if(maze[k][l] == 3)
+                {
+                    maze[k][l] = 0; //resetting the final pos
+                }
+            }
+        }
         player[0] = i;
         player[1] = j;
         maze[i][j] = 3;
@@ -356,15 +343,15 @@ public class MazeGame extends Game
 
     public void setFinalPosition(int i, int j){
         for(int k = 0; k< x; k++)
-         {
+        {
             for(int l = 0; l< y; l++)
-             {
-                    if(maze[k][l] == 2)
-                    {
-                        maze[k][l] = 0; //resetting the final pos from prev
-                    }
-             }
-         }
+            {
+                if(maze[k][l] == 2)
+                {
+                    maze[k][l] = 0; //resetting the final pos from prev
+                }
+            }
+        }
         finalX = i;
         finalY = j;
         maze[i][j] = 2;
@@ -372,10 +359,20 @@ public class MazeGame extends Game
 
     public void setLines(int[][] lines){
         maze = lines;
+        x = y = maze[0].length;
+        //y = maze.length;
     }
 
     public int[][] getLines(){
         return maze;
+    }
+
+    public int getMazeWidth(){
+        return maze[0].length;
+    }
+
+    public int getMazeHeight(){
+        return maze.length;
     }
 
 
