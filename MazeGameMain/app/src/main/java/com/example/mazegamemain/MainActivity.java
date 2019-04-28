@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
     Button button_colorRed;
     Button button_colorGreen;
     Button button_colorBlue;
+    
+    ArrayList<GameType> allGameTypes = new ArrayList<GameType>(); //Laura
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,19 +119,26 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
             }
         });
 
+       allGameTypes = mazeGame.getGameTypes();
+        
         //button for starting the game on easy difficulty
         button_easy = findViewById(R.id.button_easy);
         button_easy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent MazeGameActivity = new Intent(MainActivity.this, MazeGameActivity.class); //create an Intent to launch the game activity
-                //final GameType gt;
-                //mazeGame.getGameTypes();
-                //mazeGame.selectedGameType = gt; //change "gt" to "easy"?
+
+                Intent i = new Intent(MainActivity.this, MazeGameActivity.class); //create an Intent to launch the game activity
+
                 
+                mazeGame.selectedGameType = allGameTypes.get(1); //Laura
+                MazeCreator.adaptMaze(1)
+
                 sound.playStart();
                 connection.unregisterListener(MainActivity.this);
-                startActivity(MazeGameActivity);
+
+
+                startActivity(i);
+
 
             }
         });
@@ -140,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
             public void onClick(View v) {
                 Intent MazeGameActivity = new Intent(MainActivity.this, MazeGameActivity.class); //create an Intent to launch the game activity
 
-                //mazeGame.getGameTypes();
-                //mazeGame.selectedGameType = gt2;  //change "gt2" to "medium"?
+                mazeGame.selectedGameType = allGameTypes.get(2);  
+                MazeCreator.adaptMaze(2);                
 
                 sound.playStart();
                 startActivity(MazeGameActivity);
@@ -156,9 +166,9 @@ public class MainActivity extends AppCompatActivity implements OnAntEventListene
             public void onClick(View v) {
                 Intent MazeGameActivity = new Intent(MainActivity.this, MazeGameActivity.class); //create an Intent to launch the game activity
 
-                //mazeGame.getGameTypes();
-                //mazeGame.selectedGameType = gt3;  //change "gt3" to "hard"?
-
+                mazeGame.selectedGameType = allGameTypes.get(3);
+                MazeCreator.adaptMaze(3);
+                
                 sound.playStart();
                 startActivity(MazeGameActivity);
 
