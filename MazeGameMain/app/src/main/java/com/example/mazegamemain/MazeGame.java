@@ -1,5 +1,13 @@
 package com.example.mazegamemain;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.view.View;
+import android.widget.ImageView;
+
 import com.livelife.motolibrary.AntData;
 import com.livelife.motolibrary.Game;
 import com.livelife.motolibrary.GameType;
@@ -18,15 +26,22 @@ import static com.livelife.motolibrary.AntData.LED_COLOR_OFF;
 
 public class MazeGame extends Game
 {
-    static byte DIR_DOWN = 0;
-    static byte DIR_UP = 1;
-    static byte DIR_RIGHT = 2;
-    static byte DIR_LEFT = 3;
+    static byte DIR_DOWN = 1;
+    static byte DIR_LEFT = 2;
+    static byte DIR_UP = 3;
+    static byte DIR_RIGHT = 4;
     static byte SPRITE_COLOR = 3;
 
-    int x; // width of maze
-    int y; // height of maze
+    int x = 10; // width of maze
+    int y = 10; // height of maze
     int step = 1; // the length of one step
+
+
+    Canvas canvas;
+    ImageView spriteImage;
+
+
+
 
     public int getMazeWidth(){
         return x;
@@ -39,6 +54,7 @@ public class MazeGame extends Game
 
     int[] player = new int[3]; // contains players position (x,y) and number of hit in walls
     int[] player_next_pos = new int[2]; // contains players next position (x,y)
+    int[] player_old_pos = new int[2];
     int[][] maze = new int[x][y]; // 0 means empty field, 1 means wall, 2 means goal, 3 means start pos
 
     int finalX, finalY; // stores the finishing of maze
@@ -58,29 +74,33 @@ public class MazeGame extends Game
         GameType gt = new GameType(1, GameType.GAME_TYPE_SPEED,1, "No time restriction",1);
         addGameType(gt);
 
-        GameType gt2 = new GameType(1, GameType.GAME_TYPE_TIME,60, "Time limit: 60 sec",1);
+        GameType gt2 = new GameType(2, GameType.GAME_TYPE_TIME,60, "Time limit: 60 sec",1);
         addGameType(gt2);
+
+        GameType gt3= new GameType(3, GameType.GAME_TYPE_TIME,60, "Time limit: 60 sec",1);
+        addGameType(gt3);
+
 
     }
 
     @Override
-    public void onGameStart()
+    public void onGameStart() // Laura
     {
         super.onGameStart();
 
-        connection.setAllTilesIdle(LED_COLOR_OFF);
-        sound.playStart();
+        connection.setAllTilesColor(LED_COLOR_OFF);
 
-        initView();
+        maze = MazeCreator.mazeNu;
 
-        adaptMaze(1);
 
-        displayMaze();
-        initSprite();
+
+        checkStartPos();
+        checkFinalPos();
+
     }
 
     @Override
-    public void onGameUpdate(byte[] message)
+    public void onGameUpdate(byte[] message) // Laura
     {
         super.onGameUpdate(message);
         int event = AntData.getCommand(message);
@@ -88,9 +108,9 @@ public class MazeGame extends Game
         if(event == EVENT_PRESS)
         {
             int tile_id = AntData.getId(message);
-            connection.setTileColor(SPRITE_COLOR,tile_id);
+            sound.playPress1();
             trackDirection(tile_id);
-            if(checkGameEdge() && checkMazeEdge() )
+            if(checkGameEdge() && !checkMazeEdge() )
             {
                 if (checkGoalReached())
                 {
@@ -142,7 +162,7 @@ public class MazeGame extends Game
         {
             player[2] ++;
             sound.playError();
-            return true;
+            return false;
         }
 
         return true;
@@ -161,26 +181,38 @@ public class MazeGame extends Game
     }
 
 
-    public void trackDirection(int tile_id) // Laura, what a hardcore method wauw
+    public void trackDirection(int tile_id) // Laura
     {
-        if(tile_id == DIR_UP)
+        if(tile_id == DIR_RIGHT) // dir_up and dir_down are subtracting and adding respectively to the array, inorder to take care of the weird x/y coordinate system on the tablet
         {
-            player_next_pos[0]++;
-        }
-        else if(tile_id == DIR_DOWN)
-        {
-            player_next_pos[0]--;
+            if(player_next_pos[0] + 1 < x)
+            {
+                player_next_pos[0]++;
+            }           
         }
         else if(tile_id == DIR_LEFT)
         {
-            player_next_pos[1]--;
+            if(player_next_pos[0] -1 >= 0)
+            {
+                player_next_pos[0]--;
+            }         
         }
-        else if(tile_id == DIR_RIGHT)
+        else if(tile_id == DIR_UP)
         {
-            player_next_pos[1]++;
+             if(player_next_pos[1] - 1 >= 0)
+            {
+                player_next_pos[1]--;
+            }         
+        }
+        else if(tile_id == DIR_DOWN)
+        {
+             if(player_next_pos[1] + 1 < y)
+            {
+                player_next_pos[1]++;
+            }         
         }
     }
-
+    
     public void initView() // Yichen, initialising the maze into array
     {
 
@@ -205,27 +237,21 @@ public class MazeGame extends Game
     }
 
 
-    public void updatePlayerSprite()  // Yichen
+    public void updatePlayerSprite()  // Laura
     {
+        player_old_pos[0] = player[0];
+        player_old_pos[1] = player[1];
         player[0] = player_next_pos[0];
         player[1] = player_next_pos[1];
+        incrementPlayerScore(1,0);
+
     }
 
     public void initSprite()
     {
-        for(int i = 0; i < x; i++)
-        {
-            for (int j = 0; j < y; j++)
-            {
-                if (maze[i][j] == 3)
-                {
-                    player_next_pos[0] = i;
-                    player_next_pos[1] = j;
-                    updatePlayerSprite();
-                    return;
-                }
-            }
-        }
+        // checkPlayerSprite(); // has not yet been created
+        player_next_pos[0] = player[0];
+        player_next_pos[1] = player[1];
     }
 
 
@@ -270,10 +296,25 @@ public class MazeGame extends Game
          {
             for(int j = 0; i< y; i++)
              {
-                    if(maze[i][j] == 2;
+                    if(maze[i][j] == 2)
                     {
                         finalX = i;
                         finalY = j;
+                    }
+             }
+         }
+    }
+    
+    protected void checkStartPos()
+    {
+         for(int i = 0; i< x; i++)
+         {
+            for(int j = 0; i< y; i++)
+             {
+                    if(maze[i][j] == 3)
+                    {
+                        player[0] = i;
+                        player[1] = j;
                     }
              }
          }
@@ -297,16 +338,45 @@ public class MazeGame extends Game
         return player[1];
     }
 
-    public void setStartPosition(int i, int j){// Yichen
+    public void setStartPosition(int i, int j){
+        for(int k = 0; k< x; k++)
+         {
+            for(int l = 0; l< y; l++)
+             {
+                    if(maze[k][l] == 3)
+                    {
+                        maze[k][l] = 0; //resetting the final pos
+                    }
+             }
+         }
         player[0] = i;
         player[1] = j;
         maze[i][j] = 3;
     }
 
-    public void setFinalPosition(int i, int j){// Yichen
+    public void setFinalPosition(int i, int j){
+        for(int k = 0; k< x; k++)
+         {
+            for(int l = 0; l< y; l++)
+             {
+                    if(maze[k][l] == 2)
+                    {
+                        maze[k][l] = 0; //resetting the final pos from prev
+                    }
+             }
+         }
         finalX = i;
         finalY = j;
         maze[i][j] = 2;
     }
+
+    public void setLines(int[][] lines){
+        maze = lines;
+    }
+
+    public int[][] getLines(){
+        return maze;
+    }
+
 
 }
