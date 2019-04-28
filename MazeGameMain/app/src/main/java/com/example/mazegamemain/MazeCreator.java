@@ -39,12 +39,14 @@ public class MazeCreator {
 //                    {false,true ,true ,true ,true ,false,true ,true },
 //                    {true ,false,false,true ,false,false,true ,false},
 //                    {false,true ,false,false,false,true ,false,true }
+            maze.setLines(mazeNu);
+            maze.setStartPosition(6, 3);
+            maze.setFinalPosition(0, 9);
+
         }
         // maze.setVerticalLines(vLines);
         //maze.setHorizontalLines(hLines);
-        maze.setLines(mazeNu);
-        maze.setStartPosition(6, 3);
-        maze.setFinalPosition(0, 9);
+
 
         if (mazeNo == 2) {
             maze = new MazeGame();
@@ -79,12 +81,14 @@ public class MazeCreator {
 //                    {false,false,true ,false,false,true ,true ,true },
 //                    {false,true ,false,false,true ,true ,false,false}
 //            };
+
+            // maze.setVerticalLines(vLines);
+            //maze.setHorizontalLines(hLines);
+            maze.setLines(mazeNu);
+            maze.setStartPosition(9, 0);
+            maze.setFinalPosition(0, 9);
+
         }
-        // maze.setVerticalLines(vLines);
-        //maze.setHorizontalLines(hLines);
-        maze.setLines(mazeNu);
-        maze.setStartPosition(9, 0);
-        maze.setFinalPosition(0, 9);
 
         if (mazeNo == 3) {
             maze = new MazeGame();
