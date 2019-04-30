@@ -1,5 +1,4 @@
 package com.example.mazegamemain;
-// comment
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -47,10 +46,10 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
 
     GameView gameView;
 
-    private int width, height, lineWidth; //width and height of the whole maze and width of lines which make the walls
-    private int mazeSizeX, mazeSizeY; //size of the maze i.e. number of cells in it
-    float cellWidth, cellHeight; //width and height of cells in the maze
-    float totalCellWidth, totalCellHeight; //store result of cellWidth+lineWidth and cellHeight+lineWidth respectively
+    private int width, height, lineWidth; //width and height of the whole maze and width of blocks
+    private int mazeSizeX, mazeSizeY; //size of the maze, number of blocks in it
+    float blockWidth, blockHeight; //width and height of cells in the maze
+    float totalBlockWidth, totalBlockHeight; //store result of final width and height of blocks respectively
 
     float maze_to_screen_x,maze_to_screen_y;
 
@@ -156,24 +155,7 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
 
 
     //here writes movement of the ball
-    /*
-    @Override
-    public boolean press(int tile_id){ //when press tiles, the ball moves
-        boolean traced = false;
-            switch (tile_id) {
-                case tile_id == UP: // michael, define each direction
-                    traced = maze.trackDirection(MazeGame.DIR_UP);
-                    break;
-                case tile_id == DOWN:
-                    traced = maze.trackDirection(MazeGame.DIR_DOWN);
-                    break;
-                case tile_id == LEFT:
-                    traced = maze.trackDirection(MazeGame.DIR_LEFT);
-                    break;
-                case tile_id == RIGHT:
-                    traced = maze.trackDirection(MazeGame.DIR_RIGHT);
-                    break;
-            }
+   /*
 
         if (traced){ //as the ball moved, we have to redraw the maze
             invalidate();
@@ -203,98 +185,67 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
 
 
     class GameView extends View {
-        private int mazeFinishX, mazeFinishY; //the finishing point of the maze
+        private int mazeFinalX, mazeFinalY; //the finishing point of the maze
         //private MazeGame maze;
         private Activity context;
-        private Paint line, red, background;
+        private Paint block, text, background;
         private Canvas canvas_game;
 
         public GameView(Context context) {
             super(context);
-            mazeFinishX = mazeGame.getFinalX();
-            mazeFinishY = mazeGame.getFinalY();
+            mazeFinalX = mazeGame.getFinalX();
+            mazeFinalY = mazeGame.getFinalY();
             mazeSizeX = mazeGame.getMazeWidth();
             mazeSizeY = mazeGame.getMazeHeight();
-            line = new Paint();
-            line.setColor(Color.BLACK);
-           // line.setStrokeWidth(10);
-            red = new Paint();
-            red.setColor(Color.RED);
+            block = new Paint();
+            block.setColor(Color.BLACK); //color of the maze (blocks)
+            text = new Paint();
+            text.setColor(Color.RED); //color of the finishing indicator
             background = new Paint();
-            background.setColor(Color.WHITE);
+            background.setColor(Color.WHITE); //color of the background
         }
 
-        // Yichen
-        //super(context);
-        //this.context = (Activity)context;
-        //this.maze = maze;
-
-
-
+ 
         @Override
         protected  void onDraw(Canvas canvas) { // Yichen
             //super.onDraw(canvas);
             canvas_game = canvas;
             canvas_game.drawRect(0, 0, width, height, background); //fill in the background
-            //boolean[][] hLines = maze.getHorizontalLines();
-            //boolean[][] vLines = maze.getVerticalLines();
-            int something = mazeSizeX;
+            
 
-            //iterate over the boolean arrays to draw walls
+            //iterate over the blocks to draw the mze
             int [][] mazeNu = MazeCreator.mazeNu;
             for (int i = 0; i < mazeSizeX; i++) {
                 for (int j = 0; j < mazeSizeY; j++) {
                     if(mazeNu[i][j]  == 1)
                     {
                         line.setStyle(Paint.Style.FILL);
-                        canvas_game.drawRect((float)j*totalCellWidth, (float)i*totalCellHeight, (float)(j*totalCellWidth+totalCellWidth), (float)(i*totalCellHeight+totalCellHeight), line);
-                        // draw square;
+                        canvas_game.drawRect((float)j*totalBlockWidth, (float)i*totalBlockHeight, (float)(j*totalBlockWidth+totalBlockWidth), (float)(i*totalBlockHeight+totalBlockHeight), block);
+                        // draw black squares when the value is 1
                     }
                 }
             }
 
-            //draw the finishing point indicator
+            //draw a text at the finishing point
             canvas_game.drawText("F",
-                    (mazeFinishY * totalCellWidth) + (cellWidth * 0.25f),
-                    (mazeFinishX * totalCellHeight) + (cellHeight * 0.75f),
-                    red);
+                    (mazeFinalY * totalBlockWidth) + (blockWidth * 0.25f),
+                    (mazeFinalX * totalBlockHeight) + (blockHeight * 0.75f),
+                    text);
 
         }
         @Override
-        protected void onSizeChanged(int w, int h, int oldw, int oldh) { // Yichen
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) { // Yichen, calculations make the maze expnds to the full screen
             width = (w < h)?w:h;
             height = width;         //for now square mazes
             lineWidth = 1;          //for now 1 pixel wide walls
-            cellWidth = (width - ((float)mazeSizeX*lineWidth)) / mazeSizeX;
-            totalCellWidth = cellWidth+lineWidth;
-            cellHeight = (height - ((float)mazeSizeY*lineWidth)) / mazeSizeY;
-            totalCellHeight = cellHeight+lineWidth;
-            red.setTextSize(cellHeight*0.75f);
+            blockWidth = (width - ((float)mazeSizeX*lineWidth)) / mazeSizeX;
+            totalBlockWidth = blockWidth+lineWidth; //the final width of the block
+            blockHeight = (height - ((float)mazeSizeY*lineWidth)) / mazeSizeY;
+            totalBlockHeight = blockHeight+lineWidth;
+            text.setTextSize(blockHeight*0.75f);
             super.onSizeChanged(w, h, oldw, oldh);
         }
 
-//        public void drawMaze()
-//        {
-//            int [][] mazeNu = mazeGame.getLines();
-//            for (int i = 0; i < mazeSizeX; i++) {
-//                for (int j = 0; j < mazeSizeY; j++) {
-//                    if (mazeNu[i][j] == 1) {
-//                        line.setStyle(Paint.Style.FILL);
-//                        canvas_game.drawRect(i, j, i + cellWidth, j + cellHeight, line);
-//                        // draw square;
-//                    }
-//                }
-//            }
-//
-//        }
-
-//        public void drawSprite()
-//        {
-//            canvas_game.drawCircle((mazeGame.getCurrentX() * totalCellWidth) + (cellWidth / 2),   //x of center
-//                    (mazeGame.getCurrentY() * totalCellHeight) + (cellWidth / 2),  //y of center
-//                    (cellWidth * 0.45f),                           //radius
-//                    red);
-//        }
 
     }
 
