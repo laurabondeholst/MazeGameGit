@@ -150,25 +150,25 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
         connection.unregisterListener(this);
     }
 
-    public void moveSprite() // Laura and Michael
+   public void moveSprite() // Laura and Michael
     {
         if(mazeGame.player[0]!=mazeGame.player_old_pos[0]) // if x pos is changed
         {
-            ObjectAnimator animator =ObjectAnimator.ofFloat(spriteImage,"x",mazeGame.player[0]*maze_to_screen_x);
+            ObjectAnimator animator =ObjectAnimator.ofFloat(spriteImage,"x",mazeGame.player[0]*totalCellWidth);
             animator.setDuration(animation_duration).start();
         }
         else // if y pos is changed
         {
-            ObjectAnimator animator =ObjectAnimator.ofFloat(spriteImage,"y",mazeGame.player[1]*maze_to_screen_y);
+            ObjectAnimator animator =ObjectAnimator.ofFloat(spriteImage,"y",mazeGame.player[1]*totalCellHeight);
             animator.setDuration(animation_duration).start();
         }
 
     }
 
-    public void initAnimator()
+    public void initAnimator() // LAura and Michael
     {
-
         spriteImage = findViewById(R.id.spriteImage);
+
         if(MainActivity.SPRITE_COLOR == 1) {
             colorARGB = Color.parseColor("#ffcc0000");
         }
@@ -179,14 +179,14 @@ public class MazeGameActivity extends AppCompatActivity implements OnAntEventLis
             colorARGB = Color.parseColor("#ff669900");
         }
         spriteImage.setColorFilter(colorARGB, PorterDuff.Mode.SRC_ATOP);
-        animation_duration = 200;
-        maze_to_screen_x = 1500f/10f;
-        maze_to_screen_y = 1500f/10f;
-        float currentx = (float)mazeGame.player[0];
-        float currenty = (float)mazeGame.player[1];
-        spriteImage.animate().x((float)mazeGame.getCurrentX()*maze_to_screen_x).y((float)mazeGame.getCurrentY()*maze_to_screen_y);
-    }
 
+        animation_duration = 200;
+
+        spriteImage.setX((float)(mazeGame.getCurrentY())*totalCellWidth);
+        spriteImage.setY((float)mazeGame.getCurrentX()*totalCellWidth);
+
+    }
+    
 
 
 
